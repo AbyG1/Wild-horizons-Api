@@ -3,6 +3,8 @@ import { getDataFromDB } from './database/db.js'
 import { sendJSONResponse } from './utils/sendJSONResponse.js'
 import { getDataByPathParams } from './utils/getDataByPathParams.js'
 import { getDataByQueryParams } from './utils/getDataByQueryParams.js'
+import { addnewDestination } from './utils/addNewDestination.js'
+
 
 const PORT = 8000
 
@@ -30,7 +32,13 @@ const server = http.createServer(async (req, res) => {
     const filteredData = getDataByPathParams(destinations, 'country', country)
     sendJSONResponse(res, 200, filteredData)
 
-  } 
+  } else if (req.url === 'api/add' && req.method === 'POST'){
+
+
+    const newDestination = addnewDestination(req,res)
+    sendJSONResponse(res,200,newDestination)
+
+  }
   
   else {
 
