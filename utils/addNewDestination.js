@@ -1,15 +1,34 @@
-export const addnewDestination = (req,res) => {
-    let newDestination
-    let body = ''
-    req.on('data', (chunk) => {
-        body += chunk.toString()
-        
+export const addnewDestination = async(req,res) => {
+  
+    const body = await new Promise((resolve,reject) => {
+
+        let data = ''
+
+        req.on('data', (chunk) => {
+            data += chunk.toString()
+           
+        })
+    
+        req.on('end', () => {
+           resolve(data)
+         
+        })
+
+        req.on('error',(err) => {
+            reject(err)
+        })
+
+
     })
 
-    req.on('end', () => {
-        newDestination = JSON.parse(body)
-    })
 
+    const newDestination = JSON.parse(body)
+    console.log(newDestination)
+    
     return newDestination
+
+
+    
+
 
 }

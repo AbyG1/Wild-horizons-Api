@@ -4,11 +4,16 @@ import { sendJSONResponse } from './utils/sendJSONResponse.js'
 import { getDataByPathParams } from './utils/getDataByPathParams.js'
 import { getDataByQueryParams } from './utils/getDataByQueryParams.js'
 import { addnewDestination } from './utils/addNewDestination.js'
+import { data } from './data/data.js'
 
 
 const PORT = 8000
 
+
+
 const server = http.createServer(async (req, res) => {
+
+
   const destinations = await getDataFromDB()
 
   const urlObj = new URL(req.url, `http://${req.headers.host}`)
@@ -32,10 +37,13 @@ const server = http.createServer(async (req, res) => {
     const filteredData = getDataByPathParams(destinations, 'country', country)
     sendJSONResponse(res, 200, filteredData)
 
-  } else if (req.url === 'api/add' && req.method === 'POST'){
+  } else if (req.url === '/api/add' && req.method === 'POST'){
 
+  
+    const newDestination = await addnewDestination(req,res)
 
-    const newDestination = addnewDestination(req,res)
+    data.push(newDestination)
+  
     sendJSONResponse(res,200,newDestination)
 
   }
